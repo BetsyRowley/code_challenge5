@@ -1,25 +1,21 @@
 var myApp = angular.module('myApp', []);
 
-myApp.controller('SendMessage', ['$scope', 'DataService', function($scope, DataService){
+myApp.controller('SendMessage', ['$scope', 'DataService', function($scope, DataService) {
+  console.log('SendMessage Controller called');
 
-var dataService = DataService;
-
-  $scope.message = {
+  $scope.newMessage = {
     name: '',
-    text: ''
+    message: ''
   };
 
-$scope.messageArray = dataService.messageArray;
-$scope.addMessage = dataService.addMessage;
+  $scope.postData = DataService.postData;
+
 
 }]);
 
-myApp.controller('ShowMessages', ['$scope', 'DataService', function($scope, DataService) {
-
+myApp.controller('AllMessages', ['$scope', 'DataService', function($scope, DataService) {
   $scope.messageObject = DataService.messageObject;
   $scope.getData = DataService.getData;
-
-
 }]);
 
 myApp.factory('DataService', ['$http', function($http){
@@ -27,33 +23,25 @@ myApp.factory('DataService', ['$http', function($http){
       messages : []
     };
 
-    messageArray = [];
-
-    var addMessage = function(message) {
-      console.log(message);
-      var copy = angular.copy(message);
-      messageArray.push(copy);
-      console.log(messageArray);
-      postData(messageArray);
-    };
 
     function getData(){
       $http.get('/messages').then(function(response){
-        console.log('Object back from db: ', response);
+        messageObject.messages = response.data;
+        console.log(messageObject.messages);
       });
     }
 
     function postData(message){
+      console.log('Message sent to db: ', message);
       $http.post('/messages', message).then(function(response){
-        messageObject.response = response;
+          console.log('Response from db: ', response);
+          getData();
       });
-      getData();
+
     }
 
     return {
       messageObject : messageObject,
-      addMessage: addMessage,
-      messageArray: messageArray,
       getData  : getData,
       postData : postData
     };

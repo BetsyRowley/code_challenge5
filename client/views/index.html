@@ -16,21 +16,22 @@
       <h1>Chi Message Board</h1>
     </div>
 
-    <div class="container" ng-controller = "SendMessage">
+    <div class ="container" ng-controller = "SendMessage">
       <form>
-        <input type="text" placeholder="Enter your Name" ng-model = "message.name">
-        <input type="text" placeholder="Enter your Message" ng-model = "message.text">
+        <input type="text" placeholder="Enter your Name" ng-model = "newMessage.name">
+        <input type="text" placeholder="Enter your message" ng-model = "newMessage.message">
         <button type="button" class = "btn btn-primary"
-                ng-click = "addMessage(message)">Post Message</button>
+                  ng-click = postData(newMessage)>Post Message</button>
       </form>
-
     </div>
 
-    <div class="containter" ng-controller = "ShowMessages">
-      <div ng-repeat = "message in messageObject.data">
-        <p>{{ message.name }}: {{ message.text }}</p>
+    <div class="container" ng-controller = "AllMessages">
+      <h2>Message History</h2>
+      <div ng-init = "getData()">
+        <div ng-repeat = "message in messageObject.messages">
+          <p><b>{{ message.name }}:</b> {{ message.message }}</p>
+        </div>
       </div>
-
     </div>
 
   </body>
